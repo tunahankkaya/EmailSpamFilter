@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "Wzh1Y6x/r5u3tLr/j8GeVE5sqriiLQa5Zwu8nNTdXhA=",
+  "Source": "eMailSpam",
+  "BasePath": "_content/eMailSpam",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}
