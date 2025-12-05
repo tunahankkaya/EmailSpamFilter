@@ -27,9 +27,3 @@ Bu versiyon (v1), **"Dengesiz Veri Seti" (Imbalanced Dataset)** üzerinde eğiti
 
 * **Planlanan Çözüm (v2):** Algoritma, kelime varlığına bakan Bernoulli modelinden, kelime frekanslarını ve toplam kelime havuzunu dikkate alan **Multinomial Naive Bayes** modeline güncellenecektir.
 
-## 🚀 Kurulum ve Çalıştırma
-
-1. Projeyi klonlayın:
-   ```bash
-   git clone [https://github.com/kullaniciadi/repo-adi.git](https://github.com/kullaniciadi/repo-adi.git)
-
