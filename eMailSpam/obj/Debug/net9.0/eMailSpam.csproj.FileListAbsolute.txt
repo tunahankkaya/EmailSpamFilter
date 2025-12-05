@@ -32,3 +32,4 @@
 /home/tanerkilinc/Projects/emailSpam/eMailSpam/obj/Debug/net9.0/eMailSpam.pdb
 /home/tanerkilinc/Projects/emailSpam/eMailSpam/obj/Debug/net9.0/eMailSpam.genruntimeconfig.cache
 /home/tanerkilinc/Projects/emailSpam/eMailSpam/obj/Debug/net9.0/ref/eMailSpam.dll
+/home/tanerkilinc/Projects/emailSpam/eMailSpam/obj/Debug/net9.0/eMailSpam.sourcelink.json
