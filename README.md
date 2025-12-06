@@ -1,29 +1,38 @@
-# 📧 C# Naive Bayes Spam Classifier (v1)
+# 📧 C# Spam Classifier (v2 - Multinomial Naive Bayes)
 
-Bu proje, C# ve .NET Core kullanılarak **sıfırdan (from scratch)** geliştirilmiş bir E-Posta Spam Filtresi uygulamasıdır. Herhangi bir hazır makine öğrenmesi kütüphanesi (ML.NET, Python Scikit-learn vb.) kullanılmadan, **Naive Bayes** algoritmasının saf matematiksel mantığı kodlanmıştır.
+Bu proje, C# ve .NET Core kullanılarak **sıfırdan (from scratch)** geliştirilmiş, harici bir ML kütüphanesi kullanılmadan saf matematiksel mantıkla çalışan bir E-Posta Spam Filtresi uygulamasıdır.
 
-## 🎯 Proje Amacı
-İstatistiksel öğrenme yöntemlerinin yazılım dünyasında nasıl uygulandığını anlamak ve "Metin Sınıflandırma" (Text Classification) algoritmalarının temellerini kavramak.
+Proje, **Bernoulli** modelinden (v1) başlayıp, dengesiz veri setlerinde daha başarılı olan **Multinomial** modele (v2) evrilen bir öğrenme sürecinin ürünüdür.
 
-## 🛠️ Kullanılan Teknolojiler
-* **Dil:** C#
-* **Veri Formatı:** JSON (CSV'den dönüştürülmüş Spam/Ham veri seti)
-* **Algoritma:** Naive Bayes (Bernoulli Modeli)
-* **Veri Yapıları:** `Dictionary<string, int>`, `HashSet`, `List<T>`
+## 🎯 Proje Kazanımları ve Mühendislik Vizyonu
+Bu proje sadece çalışan bir kod parçası değil, aynı zamanda temel Yapay Zeka ve Veri Mühendisliği kavramlarının derinlemesine analizidir:
 
-## 🧮 Matematiksel Arkaplan (v1 Yaklaşımı)
-Bu versiyonda **Bernoulli Naive Bayes** yaklaşımı benimsenmiştir.
-* Kelimelerin metin içinde kaç kere geçtiği değil, **var olup olmadığı** (1 veya 0) dikkate alınır.
-* **Laplace Smoothing:** Sıfır frekans hatasını (Zero Probability Problem) engellemek için tüm olasılıklara `+1` eklenmiştir.
-* **Log-Sum-Exp:** "Underflow" (sayıların sıfıra yuvarlanması) sorununu aşmak için olasılıklar çarpılmak yerine logaritmaları alınarak toplanmıştır.
+* **Matematiksel Sezgi (Mathematical Intuition):** Bayes Teoremi'nin sadece bir formül olmadığı; yeni kanıtlarla (kelimelerle) mevcut inancın (Spam/Ham olasılığı) nasıl güncellendiği kod üzerinde simüle edildi.
+* **Veri Mühendisliği (Data Engineering):** Ham verinin (CSV) işlenebilir formata (JSON) dönüştürülmesi, ETL süreçleri ve veri temizliği (Tokenization, Case-folding) işlemleri manuel olarak yönetildi.
+* **Algoritmik Problem Çözme:**
+    * **Underflow Problemi:** Çok küçük olasılıkların çarpımı sonucu oluşan veri kaybı, **Log-Sum-Exp** yöntemiyle (çarpma yerine logaritma toplama) çözüldü.
+    * **Zero Probability:** Hiç görülmemiş kelimelerin sistemi çökertmemesi için **Laplace Smoothing** uygulandı.
+    * **Model Optimizasyonu:** "Rare Word Paradox" hatası tespit edilerek, kelime varlığına bakan Bernoulli modelinden, kelime frekansına ve havuz yoğunluğuna bakan Multinomial modele geçiş yapıldı.
 
-Formül:
-$$P(Spam | Kelime) \propto \log(P(Spam)) + \sum \log(P(Kelime_i | Spam))$$
+## 🛠️ Teknik Detaylar (v2)
+* **Algoritma:** Multinomial Naive Bayes
+* **Dil:** C# (.NET 8.0)
+* **Veri Yapısı:** `Dictionary<string, int>` (Frekans Sayımı) ve `HashSet` (Vocabulary)
+* **Yumuşatma (Smoothing):** Paydaya `Vocabulary Size` eklenerek nadir kelimelerin ağırlığı dengelendi.
 
-## ⚠️ Bilinen Sorunlar (Known Issues - v1)
-Bu versiyon (v1), **"Dengesiz Veri Seti" (Imbalanced Dataset)** üzerinde eğitildiğinde (Spam sayısı < Ham sayısı), nadir kelimeler içeren **Normal (Ham)** e-postaları yanlışlıkla **Spam** olarak işaretleme eğilimindedir.
-<img width="1117" height="397" alt="image" src="https://github.com/user-attachments/assets/cf76db90-978f-4223-b605-de9e1fab4eef" />
-**Tespit Edilen Problem:** "Rare Word Paradox". Model, eğitim setinde az rastlanan kelimeleri gördüğünde, Spam sınıfının paydası daha küçük olduğu için matematiksel olarak Spam ihtimalini daha yüksek hesaplamaktadır.
+### Formül (Multinomial)
+Her bir kelimenin skor katkısı şu şekilde hesaplanır:
 
-* **Planlanan Çözüm (v2):** Algoritma, kelime varlığına bakan Bernoulli modelinden, kelime frekanslarını ve toplam kelime havuzunu dikkate alan **Multinomial Naive Bayes** modeline güncellenecektir.
+$$\text{Score} += \log \left( \frac{\text{Kelime Frekansı} + 1}{\text{Toplam Token Sayısı} + \text{Vocabulary Size}} \right)$$
+
+## 🔄 Sürüm Geçmişi
+
+### v2 (Güncel - Stable) ✅
+* **Yöntem:** Kelime frekansları dikkate alınır (Frequency-based).
+* **İyileştirme:** Paydaya toplam kelime dağarcığı (Vocabulary Size) eklendi.
+* **Sonuç:** Dengesiz veri setlerinde (Imbalanced Dataset) oluşan "False Positive" hataları giderildi. "Project meeting" gibi nadir kelimeler içeren normal mesajlar artık doğru sınıflandırılıyor.
+
+### v1 (Eski Sürüm) ⚠️
+* **Yöntem:** Bernoulli Naive Bayes (Kelime var/yok).
+* **Sorun:** Spam mesaj sayısı az olduğunda, nadir görülen kelimeler matematiksel olarak Spam ihtimalini yapay şekilde yükseltiyordu (Rare Word Paradox).
 
