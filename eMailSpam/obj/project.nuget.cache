@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "6M11pRTdnfU=",
+  "dgSpecHash": "Z4u2GOU0/bs=",
   "success": true,
-  "projectFilePath": "/home/tanerkilinc/Projects/emailSpam/eMailSpam/eMailSpam.csproj",
+  "projectFilePath": "/home/tanerkilinc/Projects/emailSpam/eMailSpam/SpamClassifier.csproj",
   "expectedPackageFiles": [
     "/home/tanerkilinc/.nuget/packages/microsoft.aspnetcore.openapi/9.0.10/microsoft.aspnetcore.openapi.9.0.10.nupkg.sha512",
     "/home/tanerkilinc/.nuget/packages/microsoft.openapi/1.6.17/microsoft.openapi.1.6.17.nupkg.sha512"

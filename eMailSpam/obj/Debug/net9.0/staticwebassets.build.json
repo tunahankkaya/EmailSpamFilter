@@ -1,8 +1,8 @@
 {
   "Version": 1,
-  "Hash": "Wzh1Y6x/r5u3tLr/j8GeVE5sqriiLQa5Zwu8nNTdXhA=",
-  "Source": "eMailSpam",
-  "BasePath": "_content/eMailSpam",
+  "Hash": "wl2Q3Yo9ekoQ7PEdtEY6fY/zlIr2f50t9vB2UxzR/90=",
+  "Source": "SpamClassifier",
+  "BasePath": "_content/SpamClassifier",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],

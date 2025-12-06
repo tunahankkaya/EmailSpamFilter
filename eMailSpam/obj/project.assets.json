@@ -80,9 +80,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/tanerkilinc/Projects/emailSpam/eMailSpam/eMailSpam.csproj",
-      "projectName": "eMailSpam",
-      "projectPath": "/home/tanerkilinc/Projects/emailSpam/eMailSpam/eMailSpam.csproj",
+      "projectUniqueName": "/home/tanerkilinc/Projects/emailSpam/eMailSpam/SpamClassifier.csproj",
+      "projectName": "SpamClassifier",
+      "projectPath": "/home/tanerkilinc/Projects/emailSpam/eMailSpam/SpamClassifier.csproj",
       "packagesPath": "/home/tanerkilinc/.nuget/packages/",
       "outputPath": "/home/tanerkilinc/Projects/emailSpam/eMailSpam/obj/",
       "projectStyle": "PackageReference",
