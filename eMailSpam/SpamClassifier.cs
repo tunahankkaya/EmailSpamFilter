@@ -7,39 +7,48 @@ public class SpamClassifier
     //bellekte tutmak için
     Dictionary<string, int> spamWordCounts = new Dictionary<string, int>();
     Dictionary<string, int> hamWordCounts = new Dictionary<string, int>();
-    int spamEmailCount = 0;
-    int hamEmailCount = 0;
+    int spamTotalTokenCount = 0;
+    int hamTotalTokenCount = 0;
+
+    //kelime dağarcağı (Vocabulary size) - Laplace smoothing için gerekli
+    HashSet<string> vocabulary = new HashSet<string>();
 
     public void Train(List<EmailData> trainingData)
     {
         foreach (var email in trainingData)
         {
-            var words = email.EmailContent.Split(new char[] { ' ', ',', '.', ';', ':', '!', '?', '\r', '\n', '\t', '(', ')', '[', ']', '{', '}', '<', '>', '/', '\\', '|', '-', '_', '=', '+', '"', '\'' }, StringSplitOptions.RemoveEmptyEntries);
-            words = words.Select(w => w.ToLower()).ToArray().DistinctBy(w => w).ToArray();
-            //distinctBy ile aynı kelimenin birden fazla sayılmasını engelliyoruz
+            var words = email.EmailContent.Split(new char[] { ' ', ',', '.', ';', ':', '!', '?', '\r', '\n', '\t' }, StringSplitOptions.RemoveEmptyEntries)
+                                               .Select(w => w.ToLower())
+                                               // Distinct() yok frekans değerlerini sayıyoruz => fi
+                                               .ToArray();
             if (email.IsThisSpam==1)
             {
-                spamEmailCount++;
                 foreach (var word in words)
                 {
                     if (spamWordCounts.ContainsKey(word))
-                        spamWordCounts[word]++;
+                        spamWordCounts[word]++; //frekans
                     else
-                        spamWordCounts[word] = 1;
+                    spamWordCounts[word] =1;
+
+                    spamTotalTokenCount++; //toplam spam kelime sayısını bir arttır
+                    vocabulary.Add(word); //kelimeyi genel havuza ekle
                 }
             }
             else
             {
-                hamEmailCount++;
                 foreach (var word in words)
                 {
                     if (hamWordCounts.ContainsKey(word))
                         hamWordCounts[word]++;
                     else
                         hamWordCounts[word] = 1;
+
+                    hamTotalTokenCount++;
+                    vocabulary.Add(word);
                 }
             }
         }
+
     }
 
     /*
@@ -50,32 +59,30 @@ public class SpamClassifier
     {
         var words = emailContent.Split(new char[] { ' ', ',', '.', ';', ':', '!', '?', '\r', '\n', '\t' }, StringSplitOptions.RemoveEmptyEntries)
                            .Select(w => w.ToLower())
-                           .Distinct()
                            .ToArray();
 
-        // P(spam) ve P(ham)
-        //sayılar kaybolmasın(underflow) diye logaritma ile ortalama alıyoruz
-        double totalEmails = spamEmailCount + hamEmailCount;
-        double spamScore = Math.Log(spamEmailCount/totalEmails);
-        double hamScore = Math.Log(hamEmailCount / totalEmails);
+        //Başlangıç puanları(Priors) | artık kelime sayılarına göre oranlıyoruz
+        double totalTokens = spamTotalTokenCount + hamTotalTokenCount;
+        double spamScore = Math.Log((double)spamTotalTokenCount/totalTokens);
+        double hamScore = Math.Log((double)hamTotalTokenCount / totalTokens);
 
+        int vocabSize = vocabulary.Count; //paydaya eklenecek sayı
         foreach (var word in words)
         {
-            //kelime spamlı mesajlarda kaç kere geçti? => spam skoru
-            int spamCount = spamWordCounts.ContainsKey(word) ? spamWordCounts[word]:0;
+            // MULTINOMIAL NAIVE BAYES FORMÜLÜ
 
-            // Formül: (Kelime Sayısı + 1) / (Toplam Spam Mesaj + 2)
-            // Neden +2? Çünkü iki ihtimal var: Kelime ya var ya yok. (Bernoulli Smoothing)
-            double pWordGivenSpam = (spamCount + 1.0) / (spamEmailCount + 2.0);
-            spamScore += Math.Log(pWordGivenSpam);
+            int spamCount = spamWordCounts.ContainsKey(word) ? spamWordCounts[word] : 0;
+            double pSpam = (spamCount + 1.0) / (spamTotalTokenCount + vocabSize);
+            spamScore += Math.Log(pSpam);
 
-            double hamCount = hamWordCounts.ContainsKey(word) ? spamWordCounts[word]:0;
-            double pWordGivenHam = (hamCount + 1.0) / (hamEmailCount + 2.0);
-            hamScore += Math.Log(pWordGivenHam);
+            int hamCount = hamWordCounts.ContainsKey(word) ? hamWordCounts[word] : 0;
+            // Payda: Toplam Ham Kelime Sayısı + Kelime Dağarcığı
+            double pHam = (hamCount + 1.0) / (hamTotalTokenCount + vocabSize);
+            hamScore += Math.Log(pHam);
         }
-        Console.WriteLine($"Spam Score:{spamScore:F2} | Ham Score:{hamScore:F2}");
+    Console.WriteLine($"Spam Skoru: {spamScore:F2} | Ham Skoru: {hamScore:F2}");
 
-        return spamScore>hamScore;
+        return spamScore > hamScore;
 
     }
 }

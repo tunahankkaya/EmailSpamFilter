@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("eMailSpam")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f4543d3e1f132b548ce2e3fcfafb2bc22eac5ed6")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+78571d4b1b9470ec61ef01033b75084092da920a")]
 [assembly: System.Reflection.AssemblyProductAttribute("eMailSpam")]
 [assembly: System.Reflection.AssemblyTitleAttribute("eMailSpam")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
