@@ -6,6 +6,7 @@ Proje, **Bernoulli** modelinden (v1) başlayıp, dengesiz veri setlerinde daha b
 
 ### Formül (Multinomial)
 Her bir kelimenin skor katkısı şu şekilde hesaplanır:
+
 $$\text{Score} += \log \left( \frac{\text{Kelime Frekansı} + 1}{\text{Toplam Token Sayısı} + \text{Vocabulary Size}} \right)$$
 
 ## 🔄 Sürüm Geçmişi
